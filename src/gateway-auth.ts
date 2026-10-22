@@ -4,9 +4,6 @@
 import Cookie from 'cookie'
 
 
-import { Skip } from 'gubu'
-
-
 function gateway_auth(this: any, options: any) {
   const seneca: any = this
 
@@ -287,8 +284,9 @@ function extendPrincipal(custom: any, key: string, val: any) {
 
 
 
-// Default options.
-gateway_auth.defaults = {
+// Default options, built with the builders Seneca passes in `valid`:
+// shape on Seneca 4, Gubu on Seneca 3. Seneca 4 rejects Gubu shapes.
+gateway_auth.defaults = ({ valid }: { valid: any }) => ({
 
   spec: {
 
@@ -296,7 +294,7 @@ gateway_auth.defaults = {
     // requires:
     // - https://www.npmjs.com/package/cookie-parser
     
-    azure_cookie: Skip({
+    azure_cookie: valid.Skip({
       active: false,
       token: {
         name: 'seneca-auth'
@@ -307,7 +305,7 @@ gateway_auth.defaults = {
       }
     }),
     
-    express_cookie: Skip({
+    express_cookie: valid.Skip({
       active: false,
       token: {
         name: 'seneca-auth'
@@ -318,7 +316,7 @@ gateway_auth.defaults = {
       }
     }),
 
-    lambda_cookie: Skip({
+    lambda_cookie: valid.Skip({
       active: false,
       token: {
         name: 'seneca-auth'
@@ -329,7 +327,7 @@ gateway_auth.defaults = {
       }
     }),
 
-    lambda_cognito: Skip({
+    lambda_cognito: valid.Skip({
       active: false,
       user: {
         auth: true,
@@ -342,7 +340,7 @@ gateway_auth.defaults = {
 
   // When true, errors will include stack trace.
   debug: false
-}
+})
 
 
 export default gateway_auth
