@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const cookie_1 = __importDefault(require("cookie"));
-const gubu_1 = require("gubu");
 function gateway_auth(options) {
     const seneca = this;
     this.prepare(async function () {
@@ -238,13 +237,14 @@ function extendPrincipal(custom, key, val) {
     principal[key] = val;
     return principal;
 }
-// Default options.
-gateway_auth.defaults = {
+// Default options, built with the builders Seneca passes in `valid`:
+// shape on Seneca 4, Gubu on Seneca 3. Seneca 4 rejects Gubu shapes.
+gateway_auth.defaults = ({ valid }) => ({
     spec: {
         // https://expressjs.com/
         // requires:
         // - https://www.npmjs.com/package/cookie-parser
-        azure_cookie: (0, gubu_1.Skip)({
+        azure_cookie: valid.Skip({
             active: false,
             token: {
                 name: 'seneca-auth'
@@ -254,7 +254,7 @@ gateway_auth.defaults = {
                 require: true,
             }
         }),
-        express_cookie: (0, gubu_1.Skip)({
+        express_cookie: valid.Skip({
             active: false,
             token: {
                 name: 'seneca-auth'
@@ -264,7 +264,7 @@ gateway_auth.defaults = {
                 require: true,
             }
         }),
-        lambda_cookie: (0, gubu_1.Skip)({
+        lambda_cookie: valid.Skip({
             active: false,
             token: {
                 name: 'seneca-auth'
@@ -274,7 +274,7 @@ gateway_auth.defaults = {
                 require: true,
             }
         }),
-        lambda_cognito: (0, gubu_1.Skip)({
+        lambda_cognito: valid.Skip({
             active: false,
             user: {
                 auth: true,
@@ -284,7 +284,7 @@ gateway_auth.defaults = {
     },
     // When true, errors will include stack trace.
     debug: false
-};
+});
 exports.default = gateway_auth;
 if ('undefined' !== typeof (module)) {
     module.exports = gateway_auth;
