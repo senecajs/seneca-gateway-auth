@@ -284,8 +284,8 @@ function extendPrincipal(custom: any, key: string, val: any) {
 
 
 
-// Default options, built with the builders Seneca passes in `valid`:
-// shape on Seneca 4, Gubu on Seneca 3. Seneca 4 rejects Gubu shapes.
+// Default options, built with the shape builders that Seneca passes in
+// `valid`. Seneca 4 rejects option defaults built with Gubu.
 gateway_auth.defaults = ({ valid }: { valid: any }) => ({
 
   spec: {

@@ -15,13 +15,18 @@
 ## Install
 
 ```sh
-npm install @seneca/gateway-auth
+npm install seneca@^4 @seneca/gateway @seneca/gateway-auth
 ```
+
+Version 2 needs Seneca 4 and Node.js 24 or later. For Seneca 3, use
+`@seneca/gateway-auth@1`. The cookie specs also need a `sys:user,auth:user`
+action, such as the one that `@seneca/user` provides.
 
 ## Quick Example
 
 ```js
 require('seneca')()
+  .use('@seneca/gateway')
   .use('@seneca/gateway-auth')
 ```
 
